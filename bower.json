@@ -1,0 +1,17 @@
+{
+  "name": "Mark",
+  "version": "0.0.1",
+  "homepage": "https://github.com/joelcipriano/mark",
+  "authors": [
+    "Joel Cipriano <joelcipriano@gmail.com>"
+  ],
+  "description": "Another front-end framework.",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
