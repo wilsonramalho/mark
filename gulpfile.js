@@ -23,17 +23,26 @@ var gulp          = require('gulp'),
     server        = lr(),
 
     paths         = {
-                    fonts: 'source/fonts/**/*',
-                    images: 'source/images/**/*',
-                    scripts: 'source/scripts/**/*.coffee',
-                    stylesheets: 'source/stylesheets/**/*.less',
-                    templates: [
-                      'source/*.jade'
-                    ]
-                  };
+                      source: {
+                        fonts: 'source/fonts/**/*',
+                        images: 'source/images/**/*',
+                        scripts: 'source/scripts/**/*.coffee',
+                        stylesheets: 'source/stylesheets/**/*.less',
+                        templates: [
+                          'source/*.jade'
+                        ]
+                      },
+                      build: {
+                        root: 'build/',
+                        fonts: 'build/fonts/',
+                        images: 'build/images/',
+                        scripts: 'build/scripts/',
+                        stylesheets: 'build/stylesheets/'
+                      }
+                    };
 
 gulp.task('templates', function() {
-  return gulp.src(paths.templates)
+  return gulp.src(paths.source.templates)
   .pipe(jade({
     pretty: true
   }))
@@ -50,7 +59,7 @@ gulp.task('templates', function() {
 });
 
 gulp.task('images', function() {
-  return gulp.src(paths.images)
+  return gulp.src(paths.source.images)
   .pipe(cache(
     imagemin({
       interlaced: true,
@@ -71,7 +80,7 @@ gulp.task('images', function() {
 });
 
 gulp.task('stylesheets', function() {
-  return gulp.src(paths.stylesheets)
+  return gulp.src(paths.source.stylesheets)
   .pipe(less())
   .pipe(autoprefixer(
     'last 2 versions',
@@ -98,7 +107,7 @@ gulp.task('stylesheets', function() {
 });
 
 gulp.task('scripts', function() {
-  return gulp.src(paths.scripts)
+  return gulp.src(paths.source.scripts)
   .pipe(coffee())
   .pipe(jshint())
   .pipe(jshint.reporter())
@@ -122,6 +131,16 @@ gulp.task('scripts', function() {
     message: '"Scripts" task complete.',
     title: 'Sir,'
   }));
+});
+
+gulp.task('clean', function() {
+  return gulp.src(
+    paths.build.root,
+    {
+      read: false
+    }
+  )
+  .pipe(clean());
 });
 
 gulp.task('default', function() {
