@@ -3,6 +3,21 @@
   "repository": "https://github.com/joelcipriano/mark",
   "version": "0.0.0",
   "devDependencies": {
-    "gulp": "latest"
+    "gulp": "latest",
+    "gulp-autoprefixer": "latest",
+    "gulp-cache": "latest",
+    "gulp-clean": "latest",
+    "gulp-coffee": "latest",
+    "gulp-concat": "latest",
+    "gulp-imagemin": "latest",
+    "gulp-jade": "latest",
+    "gulp-jshint": "latest",
+    "gulp-less": "latest",
+    "gulp-livereload": "latest",
+    "gulp-minify-css": "latest",
+    "gulp-notify": "latest",
+    "gulp-rename": "latest",
+    "gulp-uglify": "latest",
+    "tiny-lr": "latest"
   }
 }
