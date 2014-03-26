@@ -29,7 +29,7 @@ var gulp          = require('gulp'),
                         scripts: 'source/scripts/**/*.coffee',
                         stylesheets: 'source/stylesheets/**/*.less',
                         templates: [
-                          'source/*.jade',
+                          'source/**/*.jade'
                         ]
                       },
                       build: {
@@ -143,7 +143,7 @@ gulp.task('clean', function() {
   .pipe(clean());
 });
 
-gulp.task('default', function() {
+gulp.task('default', ['clean'], function() {
   gulp.start(
     'templates',
     'images',
