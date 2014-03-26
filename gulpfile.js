@@ -29,7 +29,7 @@ var gulp          = require('gulp'),
                         scripts: 'source/scripts/**/*.coffee',
                         stylesheets: 'source/stylesheets/**/*.less',
                         templates: [
-                          'source/*.jade'
+                          'source/*.jade',
                         ]
                       },
                       build: {
@@ -144,7 +144,42 @@ gulp.task('clean', function() {
 });
 
 gulp.task('default', function() {
+  gulp.start(
+    'templates',
+    'images',
+    'stylesheets',
+    'scripts'
+  );
+});
 
-
-
+gulp.task('watch', function() {
+  server.listen(35729, function(err) {
+    if (err) {
+      return console.log(err)
+    };
+    gulp.watch(
+      paths.source.templates,
+      [
+        'templates'
+      ]
+    );
+    gulp.watch(
+      paths.source.images,
+      [
+        'images'
+      ]
+    );
+    gulp.watch(
+      paths.source.stylesheets,
+      [
+        'stylesheets'
+      ]
+    );
+    gulp.watch(
+      paths.source.scripts,
+      [
+        'scripts'
+      ]
+    );
+  });
 });
