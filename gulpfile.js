@@ -28,9 +28,7 @@ var gulp          = require('gulp'),
                         images: 'source/images/**/*',
                         scripts: 'source/scripts/**/*.coffee',
                         stylesheets: 'source/stylesheets/**/*.less',
-                        templates: [
-                          'source/**/*.jade'
-                        ]
+                        templates: 'source/**/*.jade'
                       },
                       build: {
                         root: 'build/',
