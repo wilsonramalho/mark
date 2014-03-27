@@ -20,38 +20,10 @@ var gulp          = require('gulp'),
 
     livereload    = require('gulp-livereload'),
     lr            = require('tiny-lr'),
-    server        = lr(),
-
-    paths         = {
-                      source: {
-                        allFiles: {
-                          fonts: 'source/fonts/**/*',
-                          images: 'source/images/**/*',
-                          scripts: 'source/scripts/**/*.coffee',
-                          stylesheets: 'source/stylesheets/**/*.less',
-                          templates: 'source/**/*.jade'
-                        },
-                        rootFiles: {
-                          fonts: 'source/fonts/*',
-                          images: 'source/images/*',
-                          scripts: 'source/scripts/*.coffee',
-                          stylesheets: 'source/stylesheets/*.less',
-                          templates: 'source/*.jade'
-                        }
-                      },
-                      build: {
-                        folders: {
-                          root: 'build/',
-                          fonts: 'build/fonts/',
-                          images: 'build/images/',
-                          scripts: 'build/scripts/',
-                          stylesheets: 'build/stylesheets/'
-                        }
-                      }
-                    };
+    server        = lr();
 
 gulp.task('images', function() {
-  return gulp.src(paths.source.allFiles.images)
+  return gulp.src('source/images/**/*')
   .pipe(cache(
     imagemin({
       interlaced: true,
@@ -60,7 +32,7 @@ gulp.task('images', function() {
     })
   ))
   .pipe(gulp.dest(
-    paths.build.folders.images
+    'build/images/'
   ))
   .pipe(livereload(
     server
@@ -71,7 +43,7 @@ gulp.task('images', function() {
 });
 
 gulp.task('stylesheets', function() {
-  return gulp.src(paths.source.rootFiles.stylesheets)
+  return gulp.src('source/stylesheets/*.less')
   .pipe(less())
   .pipe(autoprefixer(
     'last 2 versions',
@@ -79,14 +51,14 @@ gulp.task('stylesheets', function() {
     'ie 9'
   ))
   .pipe(gulp.dest(
-    paths.build.folders.stylesheets
+    'build/stylesheets/'
   ))
   .pipe(rename({
     suffix: '.min'
   }))
   .pipe(minifycss())
   .pipe(gulp.dest(
-    paths.build.folders.stylesheets
+    'build/stylesheets/'
   ))
   .pipe(livereload(
     server
@@ -97,7 +69,7 @@ gulp.task('stylesheets', function() {
 });
 
 gulp.task('scripts', function() {
-  return gulp.src(paths.source.allFiles.scripts)
+  return gulp.src('source/scripts/**/*.coffee')
   .pipe(coffee())
   .pipe(jshint())
   .pipe(jshint.reporter(
@@ -107,14 +79,14 @@ gulp.task('scripts', function() {
     'application.js'
   ))
   .pipe(gulp.dest(
-    paths.build.folders.scripts
+    'build/scripts/'
   ))
   .pipe(rename({
     suffix: '.min'
   }))
   .pipe(uglify())
   .pipe(gulp.dest(
-    paths.build.folders.scripts
+    'build/scripts/'
   ))
   .pipe(livereload(
     server
@@ -125,12 +97,12 @@ gulp.task('scripts', function() {
 });
 
 gulp.task('templates', function() {
-  return gulp.src(paths.source.rootFiles.templates)
+  return gulp.src('source/*.jade')
   .pipe(jade({
     pretty: true
   }))
   .pipe(gulp.dest(
-    paths.build.folders.root
+    'build/'
   ))
   .pipe(livereload(
     server
@@ -142,7 +114,7 @@ gulp.task('templates', function() {
 
 gulp.task('clean', function() {
   return gulp.src(
-    paths.build.folders.root,
+    'build/',
     {
       read: false
     }
@@ -165,25 +137,25 @@ gulp.task('watch', function() {
       return console.log(err)
     };
     gulp.watch(
-      paths.source.allFiles.images,
+      'source/images/**/*',
       [
         'images'
       ]
     );
     gulp.watch(
-      paths.source.allFiles.stylesheets,
+      'source/stylesheets/**/*.less',
       [
         'stylesheets'
       ]
     );
     gulp.watch(
-      paths.source.allFiles.scripts,
+      'source/scripts/**/*.coffee',
       [
         'scripts'
       ]
     );
     gulp.watch(
-      paths.source.allFiles.templates,
+      'source/**/*.jade',
       [
         'templates'
       ]
