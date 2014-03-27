@@ -14,7 +14,6 @@
     "gulp-jshint": "latest",
     "gulp-less": "latest",
     "gulp-livereload": "latest",
-    "gulp-load-plugins": "latest",
     "gulp-minify-css": "latest",
     "gulp-notify": "latest",
     "gulp-rename": "latest",
