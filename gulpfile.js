@@ -24,40 +24,34 @@ var gulp          = require('gulp'),
 
     paths         = {
                       source: {
-                        fonts: 'source/fonts/**/*',
-                        images: 'source/images/**/*',
-                        scripts: 'source/scripts/**/*.coffee',
-                        stylesheets: 'source/stylesheets/**/*.less',
-                        templates: 'source/**/*.jade'
+                        allFiles: {
+                          fonts: 'source/fonts/**/*',
+                          images: 'source/images/**/*',
+                          scripts: 'source/scripts/**/*.coffee',
+                          stylesheets: 'source/stylesheets/**/*.less',
+                          templates: 'source/**/*.jade'
+                        },
+                        rootFiles: {
+                          fonts: 'source/fonts/*',
+                          images: 'source/images/*',
+                          scripts: 'source/scripts/*.coffee',
+                          stylesheets: 'source/stylesheets/*.less',
+                          templates: 'source/*.jade'
+                        }
                       },
                       build: {
-                        root: 'build/',
-                        fonts: 'build/fonts/',
-                        images: 'build/images/',
-                        scripts: 'build/scripts/',
-                        stylesheets: 'build/stylesheets/'
+                        folders: {
+                          root: 'build/',
+                          fonts: 'build/fonts/',
+                          images: 'build/images/',
+                          scripts: 'build/scripts/',
+                          stylesheets: 'build/stylesheets/'
+                        }
                       }
                     };
 
-gulp.task('templates', function() {
-  return gulp.src(paths.source.templates)
-  .pipe(jade({
-    pretty: true
-  }))
-  .pipe(gulp.dest(
-    'build/'
-  ))
-  .pipe(livereload(
-    server
-  ))
-  .pipe(notify({
-    message: '"Templates" task complete.',
-    title: "Sir,"
-  }))
-});
-
 gulp.task('images', function() {
-  return gulp.src(paths.source.images)
+  return gulp.src(paths.source.allFiles.images)
   .pipe(cache(
     imagemin({
       interlaced: true,
@@ -66,19 +60,18 @@ gulp.task('images', function() {
     })
   ))
   .pipe(gulp.dest(
-    'build/images'
+    paths.build.folders.images
   ))
   .pipe(livereload(
     server
   ))
   .pipe(notify({
-    message: '"Images" task complete.',
-    title: 'Sir,'
+    message: 'Sir, "Images" task complete.'
   }));
 });
 
 gulp.task('stylesheets', function() {
-  return gulp.src(paths.source.stylesheets)
+  return gulp.src(paths.source.rootFiles.stylesheets)
   .pipe(less())
   .pipe(autoprefixer(
     'last 2 versions',
@@ -86,54 +79,70 @@ gulp.task('stylesheets', function() {
     'ie 9'
   ))
   .pipe(gulp.dest(
-    'build/stylesheets'
+    paths.build.folders.stylesheets
   ))
   .pipe(rename({
     suffix: '.min'
   }))
   .pipe(minifycss())
   .pipe(gulp.dest(
-    'build/stylesheets'
+    paths.build.folders.stylesheets
   ))
   .pipe(livereload(
     server
   ))
   .pipe(notify({
-    message: '"Stylesheets" task complete.',
-    title: 'Sir,'
+    message: 'Sir, "Stylesheets" task complete.'
   }));
 });
 
 gulp.task('scripts', function() {
-  return gulp.src(paths.source.scripts)
+  return gulp.src(paths.source.allFiles.scripts)
   .pipe(coffee())
   .pipe(jshint())
-  .pipe(jshint.reporter())
+  .pipe(jshint.reporter(
+    'default'
+  ))
   .pipe(concat(
     'application.js'
   ))
   .pipe(gulp.dest(
-    'build/scripts'
+    paths.build.folders.scripts
   ))
   .pipe(rename({
     suffix: '.min'
   }))
   .pipe(uglify())
   .pipe(gulp.dest(
-    'build/scripts'
+    paths.build.folders.scripts
   ))
   .pipe(livereload(
     server
   ))
   .pipe(notify({
-    message: '"Scripts" task complete.',
-    title: 'Sir,'
+    message: 'Sir, "Scripts" task complete.'
   }));
+});
+
+gulp.task('templates', function() {
+  return gulp.src(paths.source.rootFiles.templates)
+  .pipe(jade({
+    pretty: true
+  }))
+  .pipe(gulp.dest(
+    paths.build.folders.root
+  ))
+  .pipe(livereload(
+    server
+  ))
+  .pipe(notify({
+    message: 'Sir, "Templates" task complete.'
+  }))
 });
 
 gulp.task('clean', function() {
   return gulp.src(
-    paths.build.root,
+    paths.build.folders.root,
     {
       read: false
     }
@@ -143,10 +152,10 @@ gulp.task('clean', function() {
 
 gulp.task('default', ['clean'], function() {
   gulp.start(
-    'templates',
     'images',
     'stylesheets',
-    'scripts'
+    'scripts',
+    'templates'
   );
 });
 
@@ -156,27 +165,27 @@ gulp.task('watch', function() {
       return console.log(err)
     };
     gulp.watch(
-      paths.source.templates,
-      [
-        'templates'
-      ]
-    );
-    gulp.watch(
-      paths.source.images,
+      paths.source.allFiles.images,
       [
         'images'
       ]
     );
     gulp.watch(
-      paths.source.stylesheets,
+      paths.source.allFiles.stylesheets,
       [
         'stylesheets'
       ]
     );
     gulp.watch(
-      paths.source.scripts,
+      paths.source.allFiles.scripts,
       [
         'scripts'
+      ]
+    );
+    gulp.watch(
+      paths.source.allFiles.templates,
+      [
+        'templates'
       ]
     );
   });
