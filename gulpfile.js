@@ -15,6 +15,13 @@ var gulp          = require('gulp'),
     server        = lr(),
     uglify        = require('gulp-uglify');
 
+gulp.task('fonts', function() {
+  return gulp.src('source/fonts/**/*')
+  .pipe(gulp.dest('build/fonts/'))
+  .pipe(livereload(server))
+  .pipe(notify({message: 'Fonts task complete.'}));
+});
+
 gulp.task('images', function() {
   return gulp.src('source/images/**/*')
   .pipe(cache(imagemin({interlaced: true, optimizationLevel: 5, progressive: true})))
@@ -83,7 +90,7 @@ gulp.task('clean', function() {
 });
 
 gulp.task('default', function() {
-  gulp.start('images', 'stylesheets', 'coffee', 'libraries', 'templates');
+  gulp.start('fonts', 'images', 'stylesheets', 'coffee', 'libraries', 'templates');
 });
 
 gulp.task('watch', ['default'], function() {
@@ -91,10 +98,11 @@ gulp.task('watch', ['default'], function() {
     if (err) {
       return console.log(err)
     };
-    gulp.watch('source/images/**/*', ['images']);
-    gulp.watch('source/stylesheets/**/*.less', ['stylesheets']);
-    gulp.watch('source/scripts/**/*.coffee', ['coffee']);
+    gulp.watch(['source/fonts/**/*'], ['fonts']);
+    gulp.watch(['source/images/**/*'], ['images']);
+    gulp.watch(['source/stylesheets/**/*.less'], ['stylesheets']);
+    gulp.watch(['source/scripts/**/*.coffee'], ['coffee']);
     gulp.watch(['gulpfile.js', 'source/scripts/**/*.js'], ['libraries']);
-    gulp.watch('source/**/*.jade', ['templates']);
+    gulp.watch(['source/**/*.jade'], ['templates']);
   });
 });
