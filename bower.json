@@ -3,6 +3,7 @@
   "repository": "https://github.com/joelcipriano/mark",
   "version": "0.0.0",
   "devDependencies": {
+    "bootstrap": null,
     "jquery": null
   }
 }

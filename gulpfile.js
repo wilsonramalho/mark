@@ -23,26 +23,50 @@ gulp.task('images', function() {
   .pipe(notify({message: 'Images task complete.'}));
 });
 
-gulp.task('stylesheets', function() {
-  return gulp.src('source/stylesheets/application.less')
-  .pipe(less())
-  .pipe(autoprefixer('last 2 versions', 'ie 8', 'ie 9'))
-  .pipe(minifycss())
-  .pipe(gulp.dest('build/stylesheets/'))
-  .pipe(livereload(server))
-  .pipe(notify({message: 'Stylesheets task complete.'}));
-});
-
-gulp.task('scripts', function() {
-  return gulp.src('source/scripts/application.coffee')
+gulp.task('coffee', function() {
+  return gulp.src('source/scripts/**/*.coffee')
   .pipe(coffee())
   .pipe(jshint())
   .pipe(jshint.reporter('default'))
-  .pipe(concat('application.js'))
+  .pipe(concat('scripts.js'))
   .pipe(uglify())
   .pipe(gulp.dest('build/scripts/'))
   .pipe(livereload(server))
-  .pipe(notify({message: 'Scripts task complete.'}));
+  .pipe(notify({message: 'Coffee task complete.'}));
+});
+
+gulp.task('libraries', function() {
+  return gulp.src([
+    'bower_components/jquery/dist/jquery.min.js',
+    'bower_components/bootstrap/js/transition.js',
+    'bower_components/bootstrap/js/alert.js',
+    'bower_components/bootstrap/js/button.js',
+    'bower_components/bootstrap/js/carousel.js',
+    'bower_components/bootstrap/js/collapse.js',
+    'bower_components/bootstrap/js/dropdown.js',
+    'bower_components/bootstrap/js/modal.js',
+    'bower_components/bootstrap/js/tooltip.js',
+    'bower_components/bootstrap/js/popover.js',
+    'bower_components/bootstrap/js/scrollspy.js',
+    'bower_components/bootstrap/js/tab.js',
+    'bower_components/bootstrap/js/affix.js',
+    'source/scripts/**/*.js'
+  ])
+  .pipe(concat('libraries.js'))
+  .pipe(uglify())
+  .pipe(gulp.dest('build/scripts/'))
+  .pipe(livereload(server))
+  .pipe(notify({message: 'Libraries task complete.'}));
+});
+
+gulp.task('stylesheets', function() {
+  return gulp.src('source/stylesheets/stylesheets.less')
+  .pipe(less())
+  .pipe(autoprefixer('last 2 versions', 'ie 8', 'ie 9'))
+  .pipe(minifycss({keepSpecialComments: 0, removeEmpty: true}))
+  .pipe(gulp.dest('build/stylesheets/'))
+  .pipe(livereload(server))
+  .pipe(notify({message: 'Stylesheets task complete.'}));
 });
 
 gulp.task('templates', function() {
@@ -58,18 +82,19 @@ gulp.task('clean', function() {
   .pipe(clean());
 });
 
-gulp.task('default', ['clean'], function() {
-  gulp.start('images', 'stylesheets', 'scripts', 'templates');
+gulp.task('default', function() {
+  gulp.start('images', 'stylesheets', 'coffee', 'libraries', 'templates');
 });
 
-gulp.task('watch', function() {
+gulp.task('watch', ['default'], function() {
   server.listen(35729, function (err) {
     if (err) {
       return console.log(err)
     };
     gulp.watch('source/images/**/*', ['images']);
     gulp.watch('source/stylesheets/**/*.less', ['stylesheets']);
-    gulp.watch('source/scripts/**/*.coffee', ['scripts']);
+    gulp.watch('source/scripts/**/*.coffee', ['coffee']);
+    gulp.watch(['gulpfile.js', 'source/scripts/**/*.js'], ['libraries']);
     gulp.watch('source/**/*.jade', ['templates']);
   });
 });
