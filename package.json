@@ -16,7 +16,6 @@
     "gulp-livereload": "latest",
     "gulp-minify-css": "latest",
     "gulp-notify": "latest",
-    "gulp-rename": "latest",
     "gulp-uglify": "latest",
     "tiny-lr": "latest"
   }

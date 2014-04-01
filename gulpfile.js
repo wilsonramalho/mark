@@ -12,7 +12,6 @@ var gulp          = require('gulp'),
     lr            = require('tiny-lr'),
     minifycss     = require('gulp-minify-css'),
     notify        = require('gulp-notify'),
-    rename        = require('gulp-rename'),
     server        = lr(),
     uglify        = require('gulp-uglify');
 
@@ -25,11 +24,9 @@ gulp.task('images', function() {
 });
 
 gulp.task('stylesheets', function() {
-  return gulp.src('source/stylesheets/*.less')
+  return gulp.src('source/stylesheets/application.less')
   .pipe(less())
   .pipe(autoprefixer('last 2 versions', 'ie 8', 'ie 9'))
-  .pipe(gulp.dest('build/stylesheets/'))
-  .pipe(rename({suffix: '.min'}))
   .pipe(minifycss())
   .pipe(gulp.dest('build/stylesheets/'))
   .pipe(livereload(server))
@@ -37,13 +34,11 @@ gulp.task('stylesheets', function() {
 });
 
 gulp.task('scripts', function() {
-  return gulp.src('source/scripts/**/*.coffee')
+  return gulp.src('source/scripts/application.coffee')
   .pipe(coffee())
   .pipe(jshint())
   .pipe(jshint.reporter('default'))
   .pipe(concat('application.js'))
-  .pipe(gulp.dest('build/scripts/'))
-  .pipe(rename({suffix: '.min'}))
   .pipe(uglify())
   .pipe(gulp.dest('build/scripts/'))
   .pipe(livereload(server))
@@ -68,14 +63,13 @@ gulp.task('default', ['clean'], function() {
 });
 
 gulp.task('watch', function() {
-  server.listen(35729, function(err) {
+  server.listen(35729, function (err) {
     if (err) {
       return console.log(err)
     };
     gulp.watch('source/images/**/*', ['images']);
     gulp.watch('source/stylesheets/**/*.less', ['stylesheets']);
     gulp.watch('source/scripts/**/*.coffee', ['scripts']);
-    gulp.watch('source/**/*.jade', ['templates']
-    );
+    gulp.watch('source/**/*.jade', ['templates']);
   });
 });
