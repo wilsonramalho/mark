@@ -23,7 +23,11 @@ gulp.task('fonts', function() {
 });
 
 gulp.task('images', function() {
-  return gulp.src('source/images/**/*')
+  return gulp.src([
+    'source/images/**/*.gif',
+    'source/images/**/*.jpg',
+    'source/images/**/*.png'
+  ])
   .pipe(cache(imagemin({interlaced: true, optimizationLevel: 5, progressive: true})))
   .pipe(gulp.dest('build/images/'))
   .pipe(livereload(server))
