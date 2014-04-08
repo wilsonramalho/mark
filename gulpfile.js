@@ -16,7 +16,10 @@ var gulp          = require('gulp'),
     uglify        = require('gulp-uglify');
 
 gulp.task('fonts', function() {
-  return gulp.src('source/fonts/**/*')
+  return gulp.src([
+    'bower_components/bootstrap/fonts/**/*',
+    'source/fonts/**/*'
+  ])
   .pipe(gulp.dest('build/fonts/'))
   .pipe(livereload(server))
   .pipe(notify({message: 'Fonts task complete.'}));
